@@ -117,19 +117,6 @@ srt_rmenu_codes <-
 cleaned_subway_codes <- 
   union(sub_rmenu_codes, srt_rmenu_codes)
 
-# Section codes into incident groups
-cleaned_subway_codes <- 
-  cleaned_subway_codes |>
-  mutate(
-    incident = case_when(
-      startsWith(rmenu_code, "E") ~ "Equipment/Mechanical",
-      startsWith(rmenu_code, "M") ~ "Miscellaneous",
-      startsWith(rmenu_code, "P") ~ "Equipment/Mechanical",
-      startsWith(rmenu_code, "S") ~ "Security/Safety",
-      startsWith(rmenu_code, "T") ~ "Operator"
-    )
-  )
-
 # Save cleaned code mappings
 write_csv(cleaned_subway_codes, 'inputs/data/subway_delay_codes.csv')
 
