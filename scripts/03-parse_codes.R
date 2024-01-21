@@ -4,7 +4,7 @@
 # Date: 23 January 2024
 # Contact: tim.prajogi@mail.utoronto.ca
 # License: MIT
-# Prerequisites: 01-download_data
+# Prerequisites: 01-download_data, 02-clean_data
 
 #### Workspace setup ####
 library(tidyverse)
