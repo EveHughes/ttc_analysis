@@ -10,6 +10,9 @@
 library(tidyverse)
 library(janitor)
 
+# Clean all objects from the workspace
+rm()
+
 #### Read and clean raw data ####
 
 ## Read in Bus data
@@ -89,7 +92,7 @@ sub_rmenu_codes <-
 sub_rmenu_codes <-
   sub_rmenu_codes |>
   rename(
-    rmenu_code = sub_rmenu_code, 
+    code = sub_rmenu_code, 
     code_description = code_description_3
   )
 
@@ -109,7 +112,7 @@ srt_rmenu_codes <-
 srt_rmenu_codes <-
   srt_rmenu_codes |>
   rename(
-    rmenu_code = srt_rmenu_code, 
+    code = srt_rmenu_code, 
     code_description = code_description_7
   )
 

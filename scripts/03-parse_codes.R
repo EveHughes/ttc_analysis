@@ -10,6 +10,9 @@
 library(tidyverse)
 library(janitor)
 
+# Clean all objects from the workspace
+rm()
+
 ### Bus data ###
 
 # Load in non-grouped data
@@ -43,7 +46,7 @@ cleaned_bus_delay_data <-
   )
 
 # Save cleaned data
-write_csv(cleaned_bus_delay_data, 'inputs/data/cleaned_bus_delay_statistics.csv')
+write_csv(cleaned_bus_delay_data, 'outputs/data/cleaned_bus_delay_statistics.csv')
 
 ### SUBWAY DATA ###
 
@@ -53,6 +56,7 @@ subway_codes <-
     file = "inputs/data/subway_delay_codes.csv",
     show_col_types = FALSE
   )
+
 
 # Section codes into incident groups
 cleaned_subway_codes <- 
@@ -68,7 +72,7 @@ cleaned_subway_codes <-
   )
 
 # Save cleaned codes
-write_csv(cleaned_subway_codes, 'inputs/data/cleaned_subway_codes.csv')
+write_csv(cleaned_subway_codes, 'outputs/data/cleaned_subway_codes.csv')
 
 
 # Read in subway data
@@ -90,7 +94,7 @@ cleaned_subway_delay_data <-
     incident,
     min_delay,
     min_gap
-  ) |>
+  )
   
 
 cleaned_subway_delay_data <- 
@@ -102,6 +106,6 @@ cleaned_subway_delay_data <-
     ),]
 
 # Save cleaned subway data
-write_csv(cleaned_subway_delay_data, 'inputs/data/cleaned_subway_delay_statistics.csv')
+write_csv(cleaned_subway_delay_data, 'outputs/data/cleaned_subway_delay_statistics.csv')
 
 

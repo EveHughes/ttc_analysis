@@ -11,6 +11,9 @@
 library(opendatatoronto)
 library(tidyverse)
 
+# Clean all objects from the workspace
+rm()
+
 #### Download and save TTC data ####
 
 ## Subway delay data
