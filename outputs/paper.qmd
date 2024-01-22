@@ -1,0 +1,68 @@
+---
+title: "This is the title"
+abstract: "This is the abstract"
+thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/ttc_analysis.git"
+author: "Timothius Prajogi"
+date: today
+date-format: long
+format: pdf
+editor: visual
+toc: true
+number-sections: true
+bibliography: refrences.bib
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+#### Workspace setup ####
+library(janitor)
+library(knitr)
+library(opendatatoronto)
+library(tidyverse)
+
+```
+
+
+## Introduction
+
+
+## Data
+
+Cite the packages used here. 
+
+Datasets used: subway data [@citesubwaydata], bus data [@citebusdata]
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+
+bus_delay_data <- 
+  read_csv(
+     file = "data/cleaned_bus_delay_statistics.csv",
+     show_col_types = FALSE
+  )
+
+subway_delay_data <-
+  read_csv(
+     file = "data/cleaned_subway_delay_statistics.csv",
+     show_col_types = FALSE
+  )
+```
+
+
+## Results
+
+
+## Discussion
+
+
+## Conclusion
+
+
+## Reference
