@@ -47,3 +47,7 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Render files
+outputs/paper.tex
+outputs/paper_files/
