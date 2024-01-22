@@ -11,7 +11,9 @@
 library(tidyverse)
 
 
-# Simulated situation attributes
+## Simulated situation attributes ##
+
+# The possible incident types causing the delay
 sim_incident_types <- 
   c(
     "Equipment/Mechanical", 
@@ -29,6 +31,7 @@ sim_incident_probabilities <-
     0.2
   )
 
+# The days of the week the buses and subways operate
 sim_operating_days <-
   c(
     "Sunday",
@@ -43,18 +46,23 @@ sim_operating_days <-
 # Assumption that delays change depending on the day
 sim_probability_of_subway_delay <-
   c(
-    0.44, # Sort of high on Sundays
-    0.33, # Slightly lower as people go back to school/work
-    0.21, # Low on Tuesday
-    0.30, # Low on Wednesday
-    0.27, # Low on Thursday
-    0.51, # High on Friday
-    0.54  # High on Saturday
+    0.18, # Sort of high on Sundays
+    0.14, # Slightly lower as people go back to school/work
+    0.10, # Low on Tuesday
+    0.10, # Low on Wednesday
+    0.11, # Low on Thursday
+    0.17, # High on Friday
+    0.20  # High on Saturday
   )
+
+# Sample 1 time from a possion dist with an average
+# of 20,000 delays in 1 day
+num_subway_delays <- rpois(1, 20,000)
 
 # Assumption that there are more bus delays (strong base since bus delay 
 # dataset is twice the size) and subway delays and bus delays are correlated
-sim_probability_of_bus_delay <- 1.5 * sim_probability_of_subway_delay
+num_bus_delays <- 1.5 * num_subway_delays
+ 
 
 
 # Simulate delays happening
