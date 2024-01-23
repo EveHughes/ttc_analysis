@@ -90,7 +90,34 @@ cleaned_subway_delay_data <-
     day,
     incident,
     min_delay,
-    min_gap
+    min_gap,
+    line
+  )
+
+# Clean up line data
+cleaned_subway_delay_data <-
+  cleaned_subway_delay_data |>
+  mutate(
+    line = case_match(line,
+      "YU" ~ "Yonge-University",
+      "YUS" ~ "Yonge-University",
+      
+      "BD" ~ "Bloor-Danforth",
+      "BD LINE 2" ~ "Bloor-Danforth",
+      
+      "SRT" ~ "Scarborough-RT",
+      
+      "SHP" ~ "Sheppard",
+      
+      "YU / BD" ~ "Yonge-University/Bloor-Danforth",
+      "BD/YU"  ~ "Yonge-University/Bloor-Danforth",
+      "YU/BD" ~ "Yonge-University/Bloor-Danforth",
+      "YUS/BD" ~ "Yonge-University/Bloor-Danforth",
+      "YU & BD" ~ "Yonge-University/Bloor-Danforth",
+      "BLOOR DANFORTH & YONGE" ~ "Yonge-University/Bloor-Danforth",
+      .default = "Other" 
+      
+    )
   )
   
 
@@ -127,7 +154,7 @@ cleaned_bus_delay_data$day |>
   unique() |>
   length() == 7
 
-# Test that delay times are non-negative
+# Test that delay times are positive
 cleaned_subway_delay_data$min_delay |>
   min() >= 0
 
@@ -136,14 +163,23 @@ cleaned_bus_delay_data$min_delay |>
 
 # Verify datatypes
 class(cleaned_subway_delay_data$day) == "character"
+class(cleaned_subway_delay_data$time) == c("hms", "difftime")
 class(cleaned_subway_delay_data$incident) == "character"
 class(cleaned_subway_delay_data$min_delay) == "numeric"
 class(cleaned_subway_delay_data$min_gap) == "numeric"
 
 class(cleaned_bus_delay_data$day) == "character"
+class(cleaned_bus_delay_data$time) == c("hms", "difftime")
 class(cleaned_bus_delay_data$incident) == "character"
 class(cleaned_bus_delay_data$min_delay) == "numeric"
 class(cleaned_bus_delay_data$min_gap) == "numeric"
 
 # Clean up workspace
-rm(list = ls())
+rm(list = c(
+  "bus_delay_data", 
+  "cleaned_bus_delay_data", 
+  "cleaned_subway_codes", 
+  "cleaned_subway_delay_data", 
+  "subway_codes", 
+  "subway_delay_data")
+  )

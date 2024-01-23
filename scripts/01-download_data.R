@@ -46,6 +46,10 @@ raw_bus_data <-
 write_csv(raw_bus_data, 'inputs/data/raw_bus_delay_statistics.csv')
 
 # Clean up workspace
-rm(list = ls())
+rm(list = c(
+  "raw_bus_data",
+  "raw_subway_data",
+  "subway_delay_codes"
+))
 
 

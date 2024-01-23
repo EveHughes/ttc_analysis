@@ -9,6 +9,8 @@
 
 #### Workspace setup ####
 library(tidyverse)
+
+
 #### Preamble ####
 # Purpose: Simulate delay data
 # Author: Timothius Prajogi
@@ -138,6 +140,11 @@ sim_data_subway <-
       prob = sim_probability_of_subway_delay, 
       replace = TRUE
     ),
+    "time" = rnorm(
+      num_subway_delays,
+      mean = 17, # Assuming a peak during rush hour
+      sd = 6 
+    )%% 24, # Staying within military time
     "incident" = sample(
       sim_incident_types, 
       num_subway_delays, 
@@ -158,6 +165,11 @@ sim_data_bus <-
       prob = sim_probability_of_subway_delay, 
       replace = TRUE
     ),
+    "time" = rnorm(
+      num_bus_delays,
+      mean = 17, # Assuming a peak during rush hour
+      sd = 6 
+    ) %% 24, # Staying within military time
     "incident" = sample(
       sim_incident_types, 
       num_bus_delays, 
@@ -174,9 +186,17 @@ sim_data_bus <-
 sim_data_subway
 sim_data_bus
 
-# Visualize the data
+# Visualize a sample for the data
 
-### TODO ggplot
+# Allow for display of plots side by side
+par(mfrow = c(1, 3))
+
+sim_data_subway |>
+  ggplot(aes(x=time)) + 
+  geom_histogram(binwidth = 0.2, fill="blue", alpha=0.75) +
+  ggtitle("A simulation of the amount of delays at a given time") + 
+  xlab("Time (in military time hrs)") +
+  ylab("Number of delays")
 
 
 # Testing
@@ -213,4 +233,13 @@ sim_data_bus$delay_time |>
   max() <= 60 * 5
 
 # Clean up workspace
-rm(list = ls())
+rm(list = c(
+  "num_bus_delays",
+  "num_subway_delays",
+  "sim_data_bus",
+  "sim_data_subway",
+  "sim_incident_probabilities", 
+  "sim_incident_types", 
+  "sim_operating_days",
+  "sim_probability_of_subway_delay"
+))

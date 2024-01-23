@@ -35,6 +35,12 @@ cleaned_bus_data <-
     min_gap
   )
 
+# Filter out situations in which the delay is 0, meaning the incident that
+# occurred didn't affect service
+cleaned_bus_data <-
+  cleaned_bus_data |>
+  filter(min_gap > 0)
+
 # Save cleaned bus data
 write_csv(cleaned_bus_data, 'inputs/data/bus_delay_statistics.csv')
 
@@ -60,11 +66,27 @@ cleaned_subway_data <-
     day,
     code,
     min_delay,
-    min_gap
+    min_gap,
+    line # additional for subway (no similar grouping for buses)
   )
 
 # Save cleaned subway data
 write_csv(cleaned_subway_data, 'inputs/data/subway_delay_statistics.csv')
+
+# The reason 2 different .csv files are stored is that the vast majority
+# of rows had a delay of 0 minutes. It seems as if a delay of 0 minutes
+# means a delay of < 1 minute which is reasonable for a subway system.
+# However, since this is an assumption, I also kept the filtered 
+# dataset for reference.
+
+# Filter out situations in which the delay is 0, meaning the incident that
+# occurred didn't affect service
+cleaned_subway_data <-
+  cleaned_subway_data |>
+  filter(min_delay > 0)
+
+# Save cleaned and filtered subway data
+write_csv(cleaned_subway_data, 'inputs/data/filtered_subway_delay_statistics.csv')
 
 # Read in subway codes
 raw_subway_codes <-
@@ -120,6 +142,44 @@ cleaned_subway_codes <-
 # Save cleaned code mappings
 write_csv(cleaned_subway_codes, 'inputs/data/subway_delay_codes.csv')
 
+#### Data Validation ####
+
+# Test that there are only 7 unique days
+cleaned_subway_data$day |>
+  unique() |>
+  length() == 7
+
+cleaned_bus_data$day |>
+  unique() |>
+  length() == 7
+
+# Test that delay times are positive
+cleaned_subway_data$min_delay |>
+  min() >= 0
+
+cleaned_bus_data$min_delay |>
+  min() >= 0
+
+# Verify datatypes
+class(cleaned_subway_data$day) == "character"
+class(cleaned_subway_data$time) == c("hms", "difftime")
+class(cleaned_subway_data$min_delay) == "numeric"
+class(cleaned_subway_data$min_gap) == "numeric"
+
+class(cleaned_bus_data$day) == "character"
+class(cleaned_bus_data$time) == c("hms", "difftime")
+class(cleaned_bus_data$min_delay) == "numeric"
+class(cleaned_bus_data$min_gap) == "numeric"
+
 # Clean up workspace
-rm(list = ls())
+rm(list = c(
+  "cleaned_bus_data",
+  "cleaned_subway_codes",
+  "cleaned_subway_data",
+  "raw_bus_data",
+  "raw_subway_codes",
+  "raw_subway_data",
+  "srt_rmenu_codes",
+  "sub_rmenu_codes"
+))
 

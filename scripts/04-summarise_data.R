@@ -90,6 +90,12 @@ total_num_subway_delays_by_incident <-
   group_by(incident) |>
   summarise(n = n())
 
+# Summarize into the total number of delays per line (e.g. BY (Bloor-Yonge))
+total_num_subway_delays_by_line <-
+  subway_delay_data |>
+  group_by(line) |>
+  summarise(n = n())
+
 # Save all the data
 write_csv(avg_bus_delay_time_by_day, "outputs/data/summaries/avg_bus_delay_time_by_day.csv")
 write_csv(avg_subway_delay_time_by_day, "outputs/data/summaries/avg_subway_delay_time_by_day.csv")
@@ -103,6 +109,20 @@ write_csv(total_num_subway_delays_by_incident, "outputs/data/summaries/total_num
 write_csv(total_bus_delay_time_by_date, "outputs/data/summaries/total_bus_delay_time_by_date.csv")
 write_csv(total_subway_delay_time_by_date, "outputs/data/summaries/total_subway_delay_time_by_date.csv")
 
+write_csv(total_num_subway_delays_by_line, "outputs/data/summaries/total_num_subway_delays_by_line.csv")
+
 # Clean up workspace
-rm(list = ls())
+rm(list = c(
+  "avg_bus_delay_time_by_day",
+  "avg_num_bus_delays_by_day",
+  "avg_num_subway_delays_by_day",
+  "avg_subway_delay_time_by_day",
+  "bus_delay_data",
+  "subway_delay_data",
+  "total_bus_delay_time_by_date",
+  "total_num_bus_delays_by_incident",
+  "total_num_subway_delays_by_incident",
+  "total_num_subway_delays_by_line",
+  "total_subway_delay_time_by_date"  
+))
 
