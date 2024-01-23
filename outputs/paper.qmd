@@ -1,6 +1,6 @@
 ---
-title: "This is the title"
-abstract: "This is the abstract"
+title: "Analyzing TTC Delay Data to Improve Future Efficiency"
+abstract: "TTC delays have been increasing over time, and especially now in a period of overhaul in many parts of the system, it becomes important to analyze the effects and relations subways have on bus delays and commuter loads. Using data published by the TTC and accessed through `opendatatoronto` we find that the greatest causes of delays are date and time, factors of which are out of anyones control, but must be accounted for to improve future operational efficieny. Further analysis must be made about the correlations with subways and buses to make a stronger argument."
 thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/ttc_analysis.git"
 author: "Timothius Prajogi"
 date: today
@@ -25,48 +25,25 @@ library(tidyverse)
 
 ```
 
-
 ## Introduction
 
-The main source public transportation of public transportation in the city of 
-Toronto is the TTC (Toronto Transit Commission). The most common methods of
-this public transportation is subways and buses. For people who frequently
-use these methods, delays are common and expected [@CityNewsBGrade]. 
-So much so that leaving early is leaving on time. 
+The main source public transportation of public transportation in the city of Toronto is the TTC (Toronto Transit Commission). The most common methods of this public transportation is subways and buses. For people who frequently use these methods, delays are common and expected [@CityNewsBGrade]. So much so that leaving early is leaving on time.
 
-With the delays getting worse and service becoming more inconsistent 
-[@TorontoStarTTCDelays], it is important to analyze potential causes and 
-therefore enable the TTC to explore potential solutions. One of such factors
-is the tight coupling of the subway and bus systems. When issues occur with the
-subway, the overflow is sent to buses, either from detoured commuter traffic,
-or resource reallocation in the form of converting regular route buses to 
-shuttle buses [@TorontoObserverShuttleBuses].
+With the delays getting worse and service becoming more inconsistent [@TorontoStarTTCDelays], it is important to analyze potential causes and therefore enable the TTC to explore potential solutions. One of such factors is the tight coupling of the subway and bus systems. When issues occur with the subway, the overflow is sent to buses, either from detoured commuter traffic, or resource reallocation in the form of converting regular route buses to shuttle buses [@TorontoObserverShuttleBuses].
 
-Within this paper we will analyze the correlations between the delays occurring
-on the subway and the delays that occur for buses. In particular, the 
-correlation between mechanical or security issues on the subway, which tend to 
-shut down a portion of the track, and with diversion and other external 
-issues (here after labeled "Miscellaneous") that occur for buses. A logical
-correlation was made above, and a correlation shown in data would go to further
-a cause and effect relationship. 
+Within this paper we will analyze the correlations between the delays occurring on the subway and the delays that occur for buses. In particular, the correlation between mechanical or security issues on the subway, which tend to shut down a portion of the track, and with diversion and other external issues (here after labeled "Miscellaneous") that occur for buses. A logical correlation was made above, and a correlation shown in data would go to further a cause and effect relationship.
 
-Later we will see the general affects of the commuter load on the transit system
-and how the system can be better optimized and fail-safed to prevent such frequent
-delays. The paper will show the trends of the amount of delays for both
-systems as a function of day and time. It was found that work days put additional
-load on both systems, the total amount of delays during weekdays being 
-significantly higher than on other days. 
+Later we will see the general affects of the commuter load on the transit system and how the system can be better optimized and fail-safed to prevent such frequent delays. The paper will show the trends of the amount of delays for both systems as a function of day and time. It was found that work days put additional load on both systems, the total amount of delays during weekdays being significantly higher than on other days.
 
-The datasets used for this analysis are described in the Data section, as well
-as the process that was done to clean the data into comparable datasets. 
-
+The datasets used for this analysis are described in the Data section, as well as the process that was done to clean the data into comparable datasets.
 
 ## Data
 
-Cite the packages used here. 
+The datasets used for this report are the latest delay statistics from the 2023 year, `TTC SUbway Delay Data` [@citesubwaydata] and `TTC Bus Delay Data` [@citebusdata], both of which were published by the TTC.
 
-Datasets used: subway data [@citesubwaydata], bus data [@citebusdata]
+Data was downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: \* `ggplot2` [@citeggplot] \* `dplyr` [@citedplyr] \* `readr` [@citereadr] \* `tibble` [@citetibble]
 
+For additional assistance with cleaning, the `janitor` [@citejanitor] package was used. For additional assistance with report generation the `knitr` [@citeknitr] package was used.
 
 ```{r}
 #| echo: false
@@ -88,14 +65,101 @@ subway_delay_data <-
   )
 ```
 
+### Overview of Datasets
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: tbl-bus_delay_data
+#| tbl-cap: Sample of Bus Delay Statistics
+
+
+# Display a sample of the bus dataset in a table
+bus_delay_data |>
+  head(5) |>
+  kable(
+    col.names = c("Date", "Time", "Day", "Incident", "Min Delay", "Min Gap"),
+    booktabs = TRUE
+  )
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: tbl-subway_delay_data
+#| tbl-cap: Sample of Subway Delay Statistics
+
+
+# Display a sample of the subway dataset in a table
+subway_delay_data |>
+  head(5) |>
+  kable(
+    col.names = c("Date", "Time", "Day", "Incident", "Min Delay", "Min Gap", "Line"),
+    booktabs = TRUE
+  )
+
+```
+
+Both @tbl-bus_delay_data and @tbl-subway_delay_data contain columns "Date" and "Time" in which the delay had occurred, and an "Incident" in which the type of incident that had occurred out of these 4 general types: "Operator" (for driver/operator related issues), "Security/Safety" (for fire, police, trespassing, etc.), "Equipment/Mechanical" (for equipment, track, vehicle, etc., failures), and "Miscellaneous" (for diversions and other external issues).
+
+For @tbl-bus_delay_data and @tbl-subway_delay_data the "Min Delay" and "Min Gap" are in minutes. Where "Min Delay" represents the delay in the schedule for the next bus and "Min Gap" is the scheduled time from the bus ahead of the following bus.
+
+For @tbl-subway_delay_data the additional parameter "Line" represents the subway line in which the delay took place in. For those not familiar
+
+In total @tbl-bus_delay_data contains 51,406 entries, whilst @tbl-subway_delay_data contains 22,465 entries.
+
+Both datasets went through basic cleaning for readability and irrelevant or unusable columns were removed and not considered in this report.
+
+Originally, the subway data reported the incident causing the delay as a unique code rather than an understandable description. This description was included instead in a separate table from the same package [@citesubwaydata]. Using `merge` from dplyr [@citedplyr], the incident was mapped to a generalized version of the description to match with the same set of generalized descriptions in the bus delay data.
+
+Similarly, "Line" was reported using acronyms instead of the full name, so for readability, the full name of the line which experienced the delay is now reported.
+
+### Issues with Dataset
+
+The vast majority of entries within the subway delay dataset had a recorded delay of 0 minutes. It seems as if a delay of 0 minutes really meant a delay of strictly less than 1 minute which is reasonable for a subway system. However, since this is an assumption, I have provided the filtered dataset for reference in the source repository, which only contains delay times greater than 0 minutes.
+
+Note that this dataset has been reduced to only 8,236 entries, comprising only 36.66% of the original dataset.
 
 ## Results
 
+### Delays as a function of Time
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-vstime
+#| fig-cap: "The amount of delays with respect to the time of day"
+#| fig-subcap: ["Bus Delays", "Subway Delays"]
+
+bus_delay_data |>
+  ggplot(aes(x=time)) +
+  geom_histogram(fill="blue", alpha=0.75) +
+  scale_x_time(breaks=scales::pretty_breaks(n=12)) +
+  theme(axis.text.x=element_text(angle=60, hjust=1))
+
+subway_delay_data |>
+  ggplot(aes(x=time)) +
+  geom_histogram(fill="blue", alpha=0.75) +
+  scale_x_time(breaks=scales::pretty_breaks(n=12)) +
+  theme(axis.text.x=element_text(angle=60, hjust=1))
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+
+# Display plots
+
+```
 
 ## Discussion
 
-
 ## Conclusion
-
 
 ## Reference
