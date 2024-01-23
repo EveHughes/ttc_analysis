@@ -156,7 +156,7 @@ subway_delay_data |>
 
 ```
 
-@fig-vsttime shows the difference in the trends of delays over time. Whilst bus delays heavily spike during rush hours where traffic alongside the buses has an impact on their operation, subway delays show a less significant increase in delays. Something important to note is the difference in scale that is present for all the graphs presented in this report, with the peak count of delays for @fig-vstime-2 being only around half of the peak count of delays for @fig-vstime-1. 
+@fig-vstime shows the difference in the trends of delays over time. Whilst bus delays heavily spike during rush hours where traffic alongside the buses has an impact on their operation, subway delays show a less significant increase in delays. Something important to note is the difference in scale that is present for all the graphs presented in this report, with the peak count of delays for @fig-vstime-2 being only around half of the peak count of delays for @fig-vstime-1. 
 
 Regardless of the scale / degree of effect that the work cycle has on the TTC, it is evident that there is a strong correlation between the traditional schedule of the work day has with the amount of delays that occur. In a similar manner, the work week cycle has a similar correlation.
 
