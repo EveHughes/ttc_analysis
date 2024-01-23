@@ -8,7 +8,6 @@
 
 #### Workspace setup ####
 library(tidyverse)
-library(lubridate)
 
 # Read in bus data
 bus_delay_data <- 
