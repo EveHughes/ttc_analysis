@@ -28,6 +28,38 @@ library(tidyverse)
 
 ## Introduction
 
+The main source public transportation of public transportation in the city of 
+Toronto is the TTC (Toronto Transit Commission). The most common methods of
+this public transportation is subways and buses. For people who frequently
+use these methods, delays are common and expected [@CityNewsBGrade]. 
+So much so that leaving early is leaving on time. 
+
+With the delays getting worse and service becoming more inconsistent 
+[@TorontoStarTTCDelays], it is important to analyze potential causes and 
+therefore enable the TTC to explore potential solutions. One of such factors
+is the tight coupling of the subway and bus systems. When issues occur with the
+subway, the overflow is sent to buses, either from detoured commuter traffic,
+or resource reallocation in the form of converting regular route buses to 
+shuttle buses [@TorontoObserverShuttleBuses].
+
+Within this paper we will analyze the correlations between the delays occurring
+on the subway and the delays that occur for buses. In particular, the 
+correlation between mechanical or security issues on the subway, which tend to 
+shut down a portion of the track, and with diversion and other external 
+issues (here after labeled "Miscellaneous") that occur for buses. A logical
+correlation was made above, and a correlation shown in data would go to further
+a cause and effect relationship. 
+
+Later we will see the general affects of the commuter load on the transit system
+and how the system can be better optimized and fail-safed to prevent such frequent
+delays. The paper will show the trends of the amount of delays for both
+systems as a function of day and time. It was found that work days put additional
+load on both systems, the total amount of delays during weekdays being 
+significantly higher than on other days. 
+
+The datasets used for this analysis are described in the Data section, as well
+as the process that was done to clean the data into comparable datasets. 
+
 
 ## Data
 
@@ -42,6 +74,7 @@ Datasets used: subway data [@citesubwaydata], bus data [@citebusdata]
 #| warning: false
 
 
+# Read in cleaned data
 bus_delay_data <- 
   read_csv(
      file = "data/cleaned_bus_delay_statistics.csv",
