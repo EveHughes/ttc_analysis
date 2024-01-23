@@ -10,9 +10,6 @@
 library(tidyverse)
 library(janitor)
 
-# Clean all objects from the workspace
-rm()
-
 ### Bus data ###
 
 # Load in non-grouped data
@@ -60,7 +57,7 @@ subway_codes <-
 
 # Section codes into incident groups
 cleaned_subway_codes <- 
-  cleaned_subway_codes |>
+  subway_codes |>
   mutate(
     incident = case_when(
       startsWith(code, "E") ~ "Equipment/Mechanical",
@@ -109,3 +106,44 @@ cleaned_subway_delay_data <-
 write_csv(cleaned_subway_delay_data, 'outputs/data/cleaned_subway_delay_statistics.csv')
 
 
+#### Data Validation ####
+
+# Test that the incident types are limited to the set
+cleaned_subway_delay_data$incident |> 
+  unique() |>
+  setequal(c("Equipment/Mechanical", "Miscellaneous", "Operator", "Security/Safety"))
+
+cleaned_bus_delay_data$incident |> 
+  unique() |>
+  setequal(c("Equipment/Mechanical", "Miscellaneous", "Operator", "Security/Safety"))
+
+
+# Test that there are only 7 unique days
+cleaned_subway_delay_data$day |>
+  unique() |>
+  length() == 7
+
+cleaned_bus_delay_data$day |>
+  unique() |>
+  length() == 7
+
+# Test that delay times are non-negative
+cleaned_subway_delay_data$min_delay |>
+  min() >= 0
+
+cleaned_bus_delay_data$min_delay |>
+  min() >= 0
+
+# Verify datatypes
+class(cleaned_subway_delay_data$day) == "character"
+class(cleaned_subway_delay_data$incident) == "character"
+class(cleaned_subway_delay_data$min_delay) == "numeric"
+class(cleaned_subway_delay_data$min_gap) == "numeric"
+
+class(cleaned_bus_delay_data$day) == "character"
+class(cleaned_bus_delay_data$incident) == "character"
+class(cleaned_bus_delay_data$min_delay) == "numeric"
+class(cleaned_bus_delay_data$min_gap) == "numeric"
+
+# Clean up workspace
+rm(list = ls())

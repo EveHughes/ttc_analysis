@@ -10,9 +10,6 @@
 library(tidyverse)
 library(janitor)
 
-# Clean all objects from the workspace
-rm()
-
 #### Read and clean raw data ####
 
 ## Read in Bus data
@@ -122,4 +119,7 @@ cleaned_subway_codes <-
 
 # Save cleaned code mappings
 write_csv(cleaned_subway_codes, 'inputs/data/subway_delay_codes.csv')
+
+# Clean up workspace
+rm(list = ls())
 

@@ -11,9 +11,6 @@
 library(opendatatoronto)
 library(tidyverse)
 
-# Clean all objects from the workspace
-rm()
-
 #### Download and save TTC data ####
 
 ## Subway delay data
@@ -48,5 +45,7 @@ raw_bus_data <-
 
 write_csv(raw_bus_data, 'inputs/data/raw_bus_delay_statistics.csv')
 
+# Clean up workspace
+rm(list = ls())
 
 

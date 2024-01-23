@@ -22,10 +22,6 @@ library(tidyverse)
 library(tidyverse)
 set.seed(302)
 
-# Clean all objects from the workspace
-rm()
-
-
 ## Simulated situation attributes ##
 
 # The possible incident types causing the delay
@@ -216,3 +212,5 @@ sim_data_bus$delay_time |>
 sim_data_bus$delay_time |>
   max() <= 60 * 5
 
+# Clean up workspace
+rm(list = ls())
