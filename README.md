@@ -50,6 +50,14 @@ ttc_analysis/
 -   `scripts` contains the R scripts used to simulate, download and clean data.
 
 
+## Running Scripts
+
+The numbers preceding the names of all the `R` scripts under the scripts folder represent the order in which they should be run. If anything changes with the file names, the prerequisites for each script file is in the preamble section. 
+
+The names of the files also represent what they each do, please see the comments made beside `03` and `04` above for explanation. If anything happens to the file names, the purpose of each script is stated in the preamble as well.
+
+Each script cleans up its own variables from the global environment. In some instances the same variable is used elsewhere, running a script may clean that variable regardless. Since everything is reproducible, you should have no issue reaching the same point as you were before. This is just a warning if you decide to debug or run snippets of this project.
+
 
 ## LLM Statement
 
