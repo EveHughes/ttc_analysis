@@ -30,29 +30,29 @@ EUVE,Work Vehicle,Equipment/Mechanical
 EUYRD,Yard/Carhouse Related Problems,Equipment/Mechanical
 MUATC,ATC Project,Miscellaneous
 MUCL,Divisional Clerk Related,Miscellaneous
-MUD,Door Problems - Passenger Related,Miscellaneous
-MUDD,Door Problems - Debris Related,Miscellaneous
-MUEC,Misc. Engineering & Construction Related Problems,Miscellaneous
-MUESA,No Operator Immediately Available,Miscellaneous
+MUD,Door Problems - Passenger Related,Equipment/Mechanical
+MUDD,Door Problems - Debris Related,Equipment/Mechanical
+MUEC,Misc. Engineering & Construction Related Problems,Equipment/Mechanical
+MUESA,No Operator Immediately Available,Equipment/Mechanical
 MUFM,Force Majeure,Miscellaneous
 MUFS,Fire/Smoke Plan B - Source External to TTC,Miscellaneous
 MUGD,Miscellaneous General Delays,Miscellaneous
-MUI,Injured or ill Customer (On Train) - Transported,Miscellaneous
-MUIE,Injured Employee,Miscellaneous
-MUIR,Injured or ill Customer (On Train) - Medical Aid Refused,Miscellaneous
-MUIRS,Injured or ill Customer (In Station) - Medical Aid Refused,Miscellaneous
-MUIS,Injured or ill Customer (In Station) - Transported,Miscellaneous
+MUI,Injured or ill Customer (On Train) - Transported,Security/Safety
+MUIE,Injured Employee,Security/Safety
+MUIR,Injured or ill Customer (On Train) - Medical Aid Refused,Security/Safety
+MUIRS,Injured or ill Customer (In Station) - Medical Aid Refused,Security/Safety
+MUIS,Injured or ill Customer (In Station) - Transported,Security/Safety
 MULD,Labour Dispute - Subway,Miscellaneous
 MUNOA,No Operator Immediately Available - Not E.S.A. Related,Miscellaneous
 MUO,Miscellaneous Other,Miscellaneous
 MUODC,Overhead Door Contact,Miscellaneous
-MUPAA,Passenger Assistance Alarm Activated - No Trouble Found,Miscellaneous
-MUPLA,Fire/Smoke Plan A,Miscellaneous
-MUPLB,Fire/Smoke Plan B - Source TTC,Miscellaneous
-MUPLC,Fire/Smoke Plan C,Miscellaneous
-MUPR1,Priority One - Train in Contact With Person,Miscellaneous
-MUSAN,Unsanitary Vehicle,Miscellaneous
-MUSC,Miscellaneous Speed Control,Miscellaneous
+MUPAA,Passenger Assistance Alarm Activated - No Trouble Found,Security/Safety
+MUPLA,Fire/Smoke Plan A,Security/Safety
+MUPLB,Fire/Smoke Plan B - Source TTC,Security/Safety
+MUPLC,Fire/Smoke Plan C,Security/Safety
+MUPR1,Priority One - Train in Contact With Person,Security/Safety
+MUSAN,Unsanitary Vehicle,Security/Safety
+MUSC,Miscellaneous Speed Control,Security/Safety
 MUTD,Training Department Related Delays,Miscellaneous
 MUTO,Misc. Transportation Other - Employee Non-Chargeable,Miscellaneous
 MUWEA,Weather Reports / Related Delays,Miscellaneous

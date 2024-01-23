@@ -61,10 +61,15 @@ cleaned_subway_codes <-
   mutate(
     incident = case_when(
       startsWith(code, "E") ~ "Equipment/Mechanical",
-      startsWith(code, "M") ~ "Miscellaneous",
+      startsWith(code, "MUI") ~ "Security/Safety",
+      startsWith(code, "MUS") ~ "Security/Safety",
+      startsWith(code, "MUP") ~ "Security/Safety",
+      startsWith(code, "MUD") ~ "Equipment/Mechanical",
+      startsWith(code, "MUE") ~ "Equipment/Mechanical",
       startsWith(code, "P") ~ "Equipment/Mechanical",
       startsWith(code, "S") ~ "Security/Safety",
-      startsWith(code, "T") ~ "Operator"
+      startsWith(code, "T") ~ "Operator",
+      .default = "Miscellaneous"
     )
   )
 

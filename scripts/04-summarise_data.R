@@ -38,12 +38,6 @@ total_bus_delay_time_by_date <-
     mean_delay_time = (total_delay_time / n),
     .groups = "keep")
 
-# Summarize into average delay time per day of the week
-avg_bus_delay_time_by_day <-
-  total_bus_delay_time_by_date |>
-  group_by(day) |>
-  summarise(mean = mean(total_delay_time))
-
 # Summarize into the total number of delays per incident type (e.g. Equipment/Mechanical)
 total_num_bus_delays_by_incident <-
   bus_delay_data |>
@@ -78,12 +72,6 @@ total_subway_delay_time_by_date <-
     mean_delay_time = (total_delay_time / n),
     .groups = "keep")
 
-# Summarize into average delay time per day of the week
-avg_subway_delay_time_by_day <-
-  total_subway_delay_time_by_date |>
-  group_by(day) |>
-  summarise(mean = mean(total_delay_time))
-
 # Summarize into the total number of delays per incident type (e.g. Equipment/Mechanical)
 total_num_subway_delays_by_incident <-
   subway_delay_data |>
@@ -97,8 +85,6 @@ total_num_subway_delays_by_line <-
   summarise(n = n())
 
 # Save all the data
-write_csv(avg_bus_delay_time_by_day, "outputs/data/summaries/avg_bus_delay_time_by_day.csv")
-write_csv(avg_subway_delay_time_by_day, "outputs/data/summaries/avg_subway_delay_time_by_day.csv")
 
 write_csv(avg_num_bus_delays_by_day, "outputs/data/summaries/avg_num_bus_delays_by_day.csv")
 write_csv(avg_num_subway_delays_by_day, "outputs/data/summaries/avg_num_subway_delays_by_day.csv")
@@ -113,10 +99,8 @@ write_csv(total_num_subway_delays_by_line, "outputs/data/summaries/total_num_sub
 
 # Clean up workspace
 rm(list = c(
-  "avg_bus_delay_time_by_day",
   "avg_num_bus_delays_by_day",
   "avg_num_subway_delays_by_day",
-  "avg_subway_delay_time_by_day",
   "bus_delay_data",
   "subway_delay_data",
   "total_bus_delay_time_by_date",
