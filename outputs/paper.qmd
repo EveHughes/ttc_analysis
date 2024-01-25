@@ -9,7 +9,9 @@ format: pdf
 editor: visual
 toc: true
 number-sections: true
-bibliography: refrences.bib
+bibliography: references.bib
+header-includes:
+  \usepackage{placeins}
 ---
 
 ```{r}
@@ -27,7 +29,7 @@ library(tidyverse)
 
 ## Introduction
 
-The main source public transportation of public transportation in the city of Toronto is the TTC (Toronto Transit Commission). The most common methods of this public transportation is subways and buses. For people who frequently use these methods, delays are common and expected [@CityNewsBGrade]. So much so that leaving early is leaving on time. With the delays getting worse and service becoming more inconsistent [@TorontoStarTTCDelays], it is important to analyze potential causes, which would therefore enable the TTC to explore potential solutions. One of such possible factors is the tight coupling of the subway and bus systems. When issues occur with the subway, the overflow is sent to buses, either from detoured commuter traffic, or resource reallocation in the form of converting regular route buses to shuttle buses [@TorontoObserverShuttleBuses]. Whether you, the reader, may be a commuter or not, having a good and reliable source of public transportation is crucial to reducing travel time for all city goers, not to mention its additional benefits for the environment.
+The main source public transportation of public transportation in the city of Toronto is the TTC (Toronto Transit Commission). From this commission, the most common methods used are subways and buses. For people who frequently use these methods, delays are common and expected [@CityNewsBGrade], so much so that leaving early is leaving on time. With the delays getting worse and service becoming more inconsistent [@TorontoStarTTCDelays], it is important to analyze potential causes, which would therefore enable the TTC to explore potential solutions. One of such possible factors is the tight coupling of the subway and bus systems. When issues occur with the subway, the overflow is sent to buses, either from detoured commuter traffic, or resource reallocation in the form of converting regular route buses to shuttle buses [@TorontoObserverShuttleBuses]. Whether one uses these methods or not, having a good and reliable source of public transportation is crucial to reducing travel time for all city goers, not to mention its additional benefits for the environment.
 
 Within this paper we will analyze the correlations between the delays occurring on the subway and the delays that occur for buses. In particular, the correlation between mechanical or security issues on the subway, which tend to shut down a portion of the track, and similar equipment and now operator failures that occur for buses. We will see the general affects of the commuter load on the transit system and how the system can be better optimized or at least supported with redundancies to prevent such frequent delays. The paper will show the trends of the amount of delays for both systems as a function of day and time. It was found that work days put additional load on both systems, the total amount of delays during weekdays being significantly higher than on other days. It is found that the cycle of the traditional work week and work day, the environment in which each exists in with regards to the facilities, equipment, and workers, have a strong correlation with delays in the TTC.
 
@@ -36,9 +38,9 @@ The next section will cover the content of the data and analyses on the results 
 
 ## Data
 
-The datasets used for this report are the latest delay statistics from the 2023 year, `TTC SUbway Delay Data` [@citesubwaydata] and `TTC Bus Delay Data` [@citebusdata], both of which were published by the TTC.
+The datasets used for this report are the latest delay statistics from the 2023 year, `TTC Subway Delay Data` [@citesubwaydata] and `TTC Bus Delay Data` [@citebusdata], both of which were published by the TTC.
 
-Data was downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
+These delay statistics were downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
 
 * `ggplot2` [@citeggplot] 
 * `dplyr` [@citedplyr] 
@@ -104,13 +106,13 @@ subway_delay_data |>
 
 ```
 
-Both @tbl-bus_delay_data and @tbl-subway_delay_data contain columns "Date" and "Time" in which the delay had occurred, and an "Incident" in which the type of incident that had occurred out of these 4 general types: "Operator" (for driver/operator related issues), "Security/Safety" (for fire, police, trespassing, etc.), "Equipment/Mechanical" (for equipment, track, vehicle, etc., failures), and "Miscellaneous" (for diversions and other external issues).
+Both the bus and subway delay dataset contain columns "Date" and "Time" in which the delay had occurred, and an "Incident" in which the type of incident that had occurred out of these 4 general types: "Operator" (for driver/operator related issues), "Security/Safety" (for fire, police, trespassing, etc.), "Equipment/Mechanical" (for equipment, track, vehicle, etc., failures), and "Miscellaneous" (for diversions and other external issues).
 
-For @tbl-bus_delay_data and @tbl-subway_delay_data the "Min Delay" and "Min Gap" are in minutes. Where "Min Delay" represents the delay in the schedule for the next bus and "Min Gap" is the scheduled time from the bus ahead of the following bus.
+"Min Delay" and "Min Gap" are represented in minutes. Where "Min Delay" represents the delay in the schedule for the next bus and "Min Gap" is the scheduled time from the bus ahead of the following bus.
 
-For @tbl-subway_delay_data the additional parameter "Line" represents the subway line in which the delay took place in. For those not familiar, these are the names of the different subway tracks the TTC utilizes.
+For the subway delay dataset, the additional feature "Line" represents the subway line in which the delay took place in. For those not familiar, these are the names of the different subway tracks the TTC utilizes. The 4 TTC lines operating in 2023 are labeled with their official name, however, the dataset also includes incidents that occurred at intersections between Yonge-University and Bloor-Danforth, which for the purposes of this report was considered separately. Additionally, lines which did not match any of the existing TTC lines were labeled "Other", as if they were significant enough to include in this dataset, they should have a relationship with the subway Incidents.
 
-In total @tbl-bus_delay_data contains 51,406 entries, whilst @tbl-subway_delay_data contains 22,465 entries, a significant difference.
+In total the bus delay dataset that @tbl-bus_delay_data samples contains 51,406 entries, whilst the subway delay dataset that @tbl-subway_delay_data samples contains 22,465 entries, a significant difference. To be precise, the amount of delays that have occurred in 2023 is 2.29 times the amount of delays that have occurred for the subway. If we further consider the filtered data, the difference amount of significant (in this case meaning with a delay time greater than 1 minute) is widened as will be discussed in @sec-issues_with_dataset. 
 
 Both datasets went through basic cleaning for readability and irrelevant or unusable columns were removed and not considered in this report.
 
@@ -131,11 +133,9 @@ Note that this filtered dataset has been reduced to only 8,236 entries, comprisi
 #| echo: false
 #| message: false
 #| warning: false
-#| label: fig-vstime
+#| label: fig-vstime1
 #| fig-cap: "The amount of delays with respect to the time of day"
-#| fig-subcap: ["Bus Delays", "Subway Delays"]
-#| layout-ncol: 2
-
+#| fig-width: 4
 
 # Display the total amount of delays (on any date) for
 # a particular time
@@ -144,19 +144,43 @@ bus_delay_data |>
   ggplot(aes(x = time)) +
   geom_histogram(fill = "blue", alpha = 0.75) +
   scale_x_time(breaks = scales::pretty_breaks(n = 12)) +
+  xlab("Time") +
+  ylab("Count") +
   theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  theme(axis.text=element_text(size=12),
+      axis.title=element_text(size=14,face="bold"))
+
+
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-vstime2
+#| fig-cap: "The amount of delays with respect to the time of day"
+#| fig-width: 4
+
+
+# Display the total amount of delays (on any date) for
+# a particular time
 
 subway_delay_data |>
   ggplot(aes(x=time)) +
   geom_histogram(fill = "red", alpha = 0.75) +
   scale_x_time(breaks = scales::pretty_breaks(n = 12)) +
+  xlab("Time") +
+  ylab("Count") +
   theme_light() + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
 
 ```
 
-@fig-vstime shows the difference in the trends of delays over time. Whilst bus delays heavily spike during rush hours where traffic alongside the buses has an impact on their operation, subway delays show a less significant increase in delays. Something important to note is the difference in scale that is present for all the graphs presented in this report, with the peak count of delays for @fig-vstime-2 being only around half of the peak count of delays for @fig-vstime-1. 
+@fig-vstime1 and @fig-vstime2 shows the difference in the trends of delays over time. Whilst bus delays heavily spike during rush hours where traffic alongside the buses has an impact on their operation, subway delays show a less significant increase in delays. Subways do not have to deal with external traffic factors which is likely the cause of buses showing a larger amount of delays during those hours in relation with other times. Something important to note is the difference in scale that is present for all the graphs presented in this report, with the peak count of delays for @fig-vstime2 being only around half of the peak count of delays for @fig-vstime1. 
 
 Regardless of the scale / degree of effect that the work cycle has on the TTC, it is evident that there is a strong correlation between the traditional schedule of the work day has with the amount of delays that occur. In a similar manner, the work week cycle has a similar correlation.
 
@@ -211,7 +235,7 @@ avg_num_subway_delays_by_day |>
 
 ```
 
-@fig-avg_num_vsday shows the similar trends that are present in the average number of delays that occur on certain days of the week. On average Sundays in 2023 produce the lowest amount of delays. Buses and subways average 101.00 and 50.75 delays respectively on Sundays. It seems that the added commuter load or the assumption of an increased commuter load causes more delays. We cannot say for certain which of the two it is, as it is equally likely that the reason that more delays occur on certain days is because more buses and trains are scheduled more frequently to accommodate the load of working commuters. Equally, it is possible that the increase in delays is caused by a human actor. As shown by @fig-vsincident, a large part of the delays for subways are security and safety issues which is almost entirely comprised of human effects. What we can say now however, is that more preparation and further analysis into commuter effects must be done by the TTC to lower the large amount of delays caused. 
+@fig-avg_num_vsday shows the similar trends that are present in the average number of delays that occur on certain days of the week. On average Sundays in 2023 produce the lowest amount of delays. Buses and subways average 101.00 and 50.75 delays respectively on Sundays. It seems that the added commuter load or the assumption of an increased commuter load causes more delays. We cannot say for certain which of the two it is, as it is equally likely that the reason that more delays occur on certain days is because more buses and trains are scheduled more frequently to accommodate the load of working commuters. Equally, it is possible that the increase in delays is caused by a human actor. As shown by @fig-vsincident1 and @fig-vsincident2, a large part of the delays for subways are security and safety issues which is almost entirely comprised of human effects. What we can say now however, is that more preparation and further analysis into commuter effects must be done by the TTC to lower the large amount of delays caused. 
 
 
 ```{r}
@@ -274,10 +298,8 @@ Here @tbl-totalbus is a random sampling of dates in 2023 and the total amount bo
 #| echo: false
 #| message: false
 #| warning: false
-#| label: fig-vsincident
+#| label: fig-vsincident1
 #| fig-cap: "The average number of delays occurred due to incident types"
-#| fig-subcap: ["Bus Delays", "Subway Delays"]
-#| layout-ncol: 2
 
 # Load summarized data about number of delays vs incidents
 
@@ -291,7 +313,18 @@ bus_delays_by_incident |>
   xlab("Incident Type") +
   ylab("Delay Count") +
   theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  guides(fill=guide_legend(title="Incident Type"))
+
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-vsincident2
+#| fig-cap: "The average number of delays occurred due to incident types"
 
 
 subway_delays_by_incident <- read_csv(
@@ -304,17 +337,17 @@ subway_delays_by_incident |>
   xlab("Incident Type") +
   ylab("Delay Count") +
   theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  guides(fill=guide_legend(title="Incident Type"))
 
 ```
 
-From @fig-vsincident-2 we can see that the leading cause of delay on the subways is "Security/Safety" incidents with 15,367 delays caused by such issues, with the next leading incident being "Equipment/Mechanical" issues with 4,005 delays occurred. "Security/Safety" covers track invasions, unsanitary trains, fire, etc. and "Equipment/Mechanical" covers any problems occurring with the functionality of the trains, the station, and the tracks. From personal experience, these results are expected. Comparatively, bus delays in @fig-vsincident-1 are majorly caused by "Equipment/Mechanical" issues with 18,786 caused. The second leading incident type is operator issues which covers any problems with the driver of the buses. These incidents account for 14,400 delays. These results pose an interesting connection. 
+From @fig-vsincident2 we can see that the leading cause of delay on the subways is "Security/Safety" incidents with 15,367 delays caused by such issues, with the next leading incident being "Equipment/Mechanical" issues with 4,005 delays occurred. "Security/Safety" covers track invasions, unsanitary trains, fire, etc. and "Equipment/Mechanical" covers any problems occurring with the functionality of the trains, the station, and the tracks. From personal experience, these results are expected. Comparatively, bus delays in @fig-vsincident1 are majorly caused by "Equipment/Mechanical" issues with 18,786 caused. The second leading incident type is operator issues which covers any problems with the driver of the buses. These incidents account for 14,400 delays. These results pose an interesting connection. 
 
-From the TTC website, we know that they have been moving towards implementing automation in the operation of subway services since 2022[@TTCAutomation]. This has not been possible for buses which is why operator error is still high on the list. This could also be explained by the ratio of operators to commuters. Whilst each bus requires an operator, multiple cars on a subway only require 1-2 operators especially with the addition of automated signalling. Similarly, the lack of employee oversight within stations and subways can explain the difference in security and safety issues. Buses don't have much to oversee, however since stations are large and employees are only stationed within the entrance floor, prevention of disruptive behaviour is more commonplace as displayed by @fig-vsincident-2 above.
+From the TTC website, we know that they have been moving towards implementing automation in the operation of subway services since 2022[@TTCAutomation]. This has not been possible for buses which is why operator error is still high on the list. This could also be explained by the ratio of operators to commuters. Whilst each bus requires an operator, multiple cars on a subway only require 1-2 operators especially with the addition of automated signalling. Similarly, the lack of employee oversight within stations and subways can explain the difference in security and safety issues. Buses don't have much to oversee, however since stations are large and employees are only stationed within the entrance floor, prevention of disruptive behaviour is more commonplace as displayed by @fig-vsincident2 above.
 
 
-### By Line
+### By Line {#sec-by_line}
 
 ```{r}
 #| eval: true
@@ -339,13 +372,15 @@ subway_delays_by_line |>
   ylab("Number of Delays")
 
 ```
+
 From @fig-vsline we see an expected result, where the longest (and oldest) lines with Yonge-University having 38 stations and Bloor-Danforth having 31 compared to Sheppard's 5 and Scarborough's 6 (previously existing) stations. With the load that these older lines are experiencing on a daily basis, the result from our analysis on delay causes is further supported. Constant maintenance and repair is required for these lines, and increased ridership also puts extra stress on the systems. Further engineering analysis is required to definitively know the extent of the effects of stress loads on these lines, and if those are the cause for the increase in delays.
 
 
-
+\FloatBarrier
 ## Conclusion
 
 In conclusion, the analysis of TTC delays has revealed critical factors impacting the efficiency and reliability of Toronto's major transit system. Analyzing data obtained from the TTC through `opendatatoronto`, we identified date and time, equipment quality, and operation failure as the major contributors to delays. Although we cannot control date and time factors, acknowledging them and their effects on the system is vital for improving future operational efficiency. Recognizing the impact of equipment quality, particularly in relation to bus mechanical failures, highlights the need for specific upgrades and maintenance in transit infrastructure. The insights from this analysis can guide future spending and research, in an attempt to be a part of the effort to enhance the TTC system for the benefit of both commuters and the city.
 
 
-## Reference
+\newpage
+## References
