@@ -136,6 +136,7 @@ Note that this filtered dataset has been reduced to only 8,236 entries, comprisi
 #| label: fig-vstime1
 #| fig-cap: "The amount of delays with respect to the time of day"
 #| fig-width: 4
+#| fig-height: 3
 
 # Display the total amount of delays (on any date) for
 # a particular time
@@ -147,9 +148,7 @@ bus_delay_data |>
   xlab("Time") +
   ylab("Count") +
   theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  theme(axis.text=element_text(size=12),
-      axis.title=element_text(size=14,face="bold"))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 
 ```
@@ -162,6 +161,7 @@ bus_delay_data |>
 #| label: fig-vstime2
 #| fig-cap: "The amount of delays with respect to the time of day"
 #| fig-width: 4
+#| fig-height: 3
 
 
 # Display the total amount of delays (on any date) for
@@ -174,9 +174,7 @@ subway_delay_data |>
   xlab("Time") +
   ylab("Count") +
   theme_light() + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 ```
 
@@ -277,13 +275,18 @@ total_bus_delay_time_by_date |>
   ggplot(aes(x = date, y = total_delay_time)) + 
   geom_point() +
   geom_smooth(method = "loess") +
-  theme_light()
+  theme_light() +
+  xlab("Date") +
+  ylab("Total Delay Time (Minutes)")
 
 total_bus_delay_time_by_date |>
   ggplot(aes(x = date, y = mean_delay_time)) + 
   geom_point() +
   geom_smooth(method = "loess") +
-  theme_light()
+  theme_light() +
+  xlab("Date") +
+  ylab("Total Delay Time (Minutes)")
+
 
 ```
 
