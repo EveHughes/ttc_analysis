@@ -20,7 +20,7 @@ EUO,RC&S Other,Equipment/Mechanical
 EUOE,Rail Cars & Shops Opr. Error,Equipment/Mechanical
 EUOPO,OPTO RC&S Non-Train Door Monitoring,Equipment/Mechanical
 EUPI,Propulsion System,Equipment/Mechanical
-EUSC,Speed Control Equipment,Equipment/Mechanical
+EUSC,Speed Control Equipment  ,Equipment/Mechanical
 EUTL,Trainline System,Equipment/Mechanical
 EUTM,Traction Motors,Equipment/Mechanical
 EUTR,Trucks,Equipment/Mechanical
@@ -43,7 +43,7 @@ MUIR,Injured or ill Customer (On Train) - Medical Aid Refused,Security/Safety
 MUIRS,Injured or ill Customer (In Station) - Medical Aid Refused,Security/Safety
 MUIS,Injured or ill Customer (In Station) - Transported,Security/Safety
 MULD,Labour Dispute - Subway,Miscellaneous
-MUNOA,No Operator Immediately Available - Not E.S.A. Related,Miscellaneous
+MUNOA,No Operator Immediately Available - Not E.S.A. Related ,Miscellaneous
 MUO,Miscellaneous Other,Miscellaneous
 MUODC,Overhead Door Contact,Miscellaneous
 MUPAA,Passenger Assistance Alarm Activated - No Trouble Found,Security/Safety
@@ -64,20 +64,20 @@ PUCSS,Central Office Signalling System,Equipment/Mechanical
 PUDCS,Data Communications System Failure,Equipment/Mechanical
 PUMEL,Escalator/Elevator Incident,Equipment/Mechanical
 PUMO,Station Other,Equipment/Mechanical
-PUMST,Station Stairway Incident,Equipment/Mechanical
+PUMST,Station Stairway Incident ,Equipment/Mechanical
 PUOPO,OPTO (COMMS) Train Door Monitoring,Equipment/Mechanical
 PUSAC,Signals Axle Counter Block Failure,Equipment/Mechanical
 PUSBE,Beacon Failure,Equipment/Mechanical
-PUSCA,SCADA Related Problems,Equipment/Mechanical
-PUSCR,Subway Car Radio Fault,Equipment/Mechanical
-PUSEA,EAS Failure,Equipment/Mechanical
-PUSI,Signals or Related Components Failure,Equipment/Mechanical
+PUSCA,SCADA Related Problems ,Equipment/Mechanical
+PUSCR,Subway Car Radio Fault ,Equipment/Mechanical
+PUSEA,EAS Failure                               ,Equipment/Mechanical
+PUSI,Signals or Related Components Failure ,Equipment/Mechanical
 PUSIO,Smart IO Failure,Equipment/Mechanical
 PUSIS,Signals Track Weather Related,Equipment/Mechanical
 PUSLC,Signals Line Countroller Failure,Equipment/Mechanical
 PUSNT,Signal Problem - No Trouble,Equipment/Mechanical
 PUSO,S/E/C Department Other,Equipment/Mechanical
-PUSRA,Subway Radio System Fault,Equipment/Mechanical
+PUSRA,Subway Radio System Fault ,Equipment/Mechanical
 PUSSW,Track Switch Failure - Signal Related Problem,Equipment/Mechanical
 PUSTC,Signals - Track Circuit Problems,Equipment/Mechanical
 PUSTP,Traction Power or Related Components Failure,Equipment/Mechanical
@@ -86,7 +86,7 @@ PUSWZ,Work Zone Problems - Signals,Equipment/Mechanical
 PUSZC,Signals Zone Countroller Failure,Equipment/Mechanical
 PUTCD,T & S Contractor Problems,Equipment/Mechanical
 PUTD,Track Level Debris - Controllable,Equipment/Mechanical
-PUTDN,Debris At Track Level - Uncontrollable,Equipment/Mechanical
+PUTDN ,Debris At Track Level - Uncontrollable,Equipment/Mechanical
 PUTIJ,Insulated Joint Related Problem,Equipment/Mechanical
 PUTIS,Ice / Snow Related Problems,Equipment/Mechanical
 PUTNT,T&S Related Problem - NTF,Equipment/Mechanical
@@ -119,7 +119,7 @@ TUKEY,Two Drum Switch Keys Activated,Operator
 TUML,Mainline Storage,Operator
 TUMVS,Operator Violated Signal,Operator
 TUNIP,Operator Not In Position,Operator
-TUNOA,No Operator Immediately Available,Operator
+TUNOA,No Operator Immediately Available ,Operator
 TUO,Transportation Department - Other,Operator
 TUOPO,OPTO Operator Related,Operator
 TUOS,Operator Overshot Platform,Operator
@@ -158,7 +158,7 @@ MRESA,No Operator Immediately Available,Miscellaneous
 MRFS,Fire/Smoke Plan B - Source External to TTC,Miscellaneous
 MRIE,Injured Employee,Miscellaneous
 MRLD,Labour Dispute - Subway,Miscellaneous
-MRNOA,No Operator Immediately Available - Not E.S.A. Related,Miscellaneous
+MRNOA,No Operator Immediately Available - Not E.S.A. Related ,Miscellaneous
 MRO,Miscellaneous Other,Miscellaneous
 MRPAA,Passenger Assistance Alarm Activated - No Trouble Found,Miscellaneous
 MRPLA,Fire/Smoke Plan A,Miscellaneous
@@ -178,7 +178,7 @@ PRSA,Axle Counter Related,Equipment/Mechanical
 PRSL,Loop Related Failures,Equipment/Mechanical
 PRSO,Signals Other,Equipment/Mechanical
 PRSP,Signals Power Supply Related,Equipment/Mechanical
-PRST,Station Stairway Incident,Equipment/Mechanical
+PRST,Station Stairway Incident ,Equipment/Mechanical
 PRSW,Switch Related,Equipment/Mechanical
 PRTST,Signals - Train Stops,Equipment/Mechanical
 PRW,Rail Defect/Fastenings/Power Rail,Equipment/Mechanical
@@ -194,7 +194,7 @@ SRSP,Suspicious Package,Security/Safety
 SRUT,Unauthorized at Track Level,Security/Safety
 TRDOE,Doors Open in Error,Operator
 TRNIP,Operator Not In Position,Operator
-TRNOA,No Operator Immediately Available,Operator
+TRNOA,No Operator Immediately Available ,Operator
 TRO,Transportation Department - Other,Operator
 TRSET,Train Controls Improperly Shut Down,Operator
 TRST,Storm Trains,Operator
