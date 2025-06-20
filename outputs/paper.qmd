@@ -14,16 +14,14 @@ header-includes:
   \usepackage{placeins}
 ---
 
-```{r}
+```{python}
 #| echo: false
 #| message: false
 #| warning: false
 
 #### Workspace setup ####
-library(janitor)
-library(knitr)
-library(opendatatoronto)
-library(tidyverse)
+import matplotlib.pyplot as plt
+import pandas as pd
 
 ```
 
@@ -49,29 +47,22 @@ These delay statistics were downloaded, cleaned, parsed, analyzed, and visualize
 
 For additional assistance with cleaning, the `janitor` [@citejanitor] package was used. For additional assistance with report generation the `knitr` [@citeknitr] package was used.
 
-```{r}
+```{python}
 #| echo: false
 #| message: false
 #| warning: false
 
 
-# Read in cleaned data
-bus_delay_data <- 
-  read_csv(
-     file = "data/cleaned_bus_delay_statistics.csv",
-     show_col_types = FALSE
-  )
+# Read bus delay data
+bus_delay_data = pd.read_csv("data/cleaned_bus_delay_statistics.csv")
 
-subway_delay_data <-
-  read_csv(
-     file = "data/cleaned_subway_delay_statistics.csv",
-     show_col_types = FALSE
-  )
+# Read subway delay data
+subway_delay_data = pd.read_csv("data/cleaned_subway_delay_statistics.csv")
 ```
 
 ### Overview of Datasets
 
-```{r}
+```{python}
 #| echo: false
 #| message: false
 #| warning: false
@@ -80,15 +71,12 @@ subway_delay_data <-
 
 
 # Display a sample of the bus dataset in a table
-bus_delay_data |>
-  head(5) |>
-  kable(
-    col.names = c("Date", "Time", "Day", "Incident", "Min Delay", "Min Gap"),
-    booktabs = TRUE
-  )
+sample_bus_delay_data = bus_delay_data.head(5)
+sample_bus_delay_data.columns = ["Date", "Time", "Day", "Incident", "Min Delay", "Min Gap"]
+sample_bus_delay_data
 ```
 
-```{r}
+```{python}
 #| echo: false
 #| message: false
 #| warning: false
@@ -97,12 +85,9 @@ bus_delay_data |>
 
 
 # Display a sample of the subway dataset in a table
-subway_delay_data |>
-  head(5) |>
-  kable(
-    col.names = c("Date", "Time", "Day", "Incident", "Min Delay", "Min Gap", "Line"),
-    booktabs = TRUE
-  )
+sample_subway_delay_data = subway_delay_data.head(5)
+sample_subway_delay_data.columns = ["Date", "Time", "Day", "Incident", "Min Delay", "Min Gap", "Line"]
+sample_subway_delay_data
 
 ```
 
@@ -128,7 +113,7 @@ Note that this filtered dataset has been reduced to only 8,236 entries, comprisi
 
 ### By Time
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -138,22 +123,30 @@ Note that this filtered dataset has been reduced to only 8,236 entries, comprisi
 #| fig-width: 4
 #| fig-height: 3
 
-# Display the total amount of delays (on any date) for
-# a particular time
+# Convert time column to datetime if not already
+bus_delay_data["time"] = pd.to_datetime(bus_delay_data["time"], errors="coerce")
 
-bus_delay_data |>
-  ggplot(aes(x = time)) +
-  geom_histogram(fill = "blue", alpha = 0.75) +
-  scale_x_time(breaks = scales::pretty_breaks(n = 12)) +
-  xlab("Time") +
-  ylab("Count") +
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# Drop any rows with invalid times
+valid_time_data = bus_delay_data.dropna(subset=["time"])
+
+# Extract just the time part for histogram binning
+valid_time_data["hour"] = valid_time_data["time"].dt.hour + valid_time_data["time"].dt.minute / 60
+
+# Plot
+plt.figure(figsize=(8, 4))
+plt.hist(valid_time_data["hour"], bins=24, color="blue", alpha=0.75)
+
+plt.xlabel("Time")
+plt.ylabel("Count")
+plt.xticks(ticks=range(0, 25, 2), labels=[f"{h}:00" for h in range(0, 25, 2)], rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
 
 ```
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -164,17 +157,32 @@ bus_delay_data |>
 #| fig-height: 3
 
 
-# Display the total amount of delays (on any date) for
-# a particular time
+# Ensure the "time" column is interpreted as a datetime
+subway_delay_data["time"] = pd.to_datetime(subway_delay_data["time"], errors="coerce")
 
-subway_delay_data |>
-  ggplot(aes(x=time)) +
-  geom_histogram(fill = "red", alpha = 0.75) +
-  scale_x_time(breaks = scales::pretty_breaks(n = 12)) +
-  xlab("Time") +
-  ylab("Count") +
-  theme_light() + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# Remove rows with invalid times
+valid_times = subway_delay_data.dropna(subset=["time"])
+
+# Convert times to fractional hours for histogram binning
+valid_times["hour_decimal"] = (
+    valid_times["time"].dt.hour + valid_times["time"].dt.minute / 60
+)
+
+# Plot histogram
+plt.figure(figsize=(8, 4))
+plt.hist(valid_times["hour_decimal"], bins=24, color="red", alpha=0.75)
+
+plt.xlabel("Time")
+plt.ylabel("Count")
+plt.xticks(
+    ticks=range(0, 25, 2),
+    labels=[f"{h}:00" for h in range(0, 25, 2)],
+    rotation=60,
+    ha="right"
+)
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
 ```
 
@@ -185,7 +193,7 @@ Regardless of the scale / degree of effect that the work cycle has on the TTC, i
 
 ### By Day
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -196,39 +204,46 @@ Regardless of the scale / degree of effect that the work cycle has on the TTC, i
 #| layout-ncol: 2
 
 
-# Load in summarized data
-avg_num_bus_delays_by_day <- read_csv(
-   file = "data/summaries/avg_num_bus_delays_by_day.csv",
-   show_col_types = FALSE
-) 
+# Define day order
+ordered_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-avg_num_bus_delays_by_day$day <- 
-  factor(avg_num_bus_delays_by_day$day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+# Load and format bus data
+avg_num_bus_delays_by_day = pd.read_csv("data/summaries/avg_num_bus_delays_by_day.csv")
+avg_num_bus_delays_by_day["day"] = pd.Categorical(avg_num_bus_delays_by_day["day"], categories=ordered_days, ordered=True)
+avg_num_bus_delays_by_day = avg_num_bus_delays_by_day.sort_values("day")
 
-avg_num_bus_delays_by_day |>
-  ggplot(aes(x = day, y = mean_num_delays, fill = day)) +
-  geom_bar(stat = 'identity') +
-  xlab("Day of the Week") +
-  ylab("Mean Number of Delays") + 
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# Plot bus delays
+plt.figure(figsize=(8, 4))
+plt.bar(
+    avg_num_bus_delays_by_day["day"],
+    avg_num_bus_delays_by_day["mean_num_delays"],
+    color="skyblue"
+)
+plt.xlabel("Day of the Week")
+plt.ylabel("Mean Number of Delays")
+plt.xticks(rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
+# Load and format subway data
+avg_num_subway_delays_by_day = pd.read_csv("data/summaries/avg_num_subway_delays_by_day.csv")
+avg_num_subway_delays_by_day["day"] = pd.Categorical(avg_num_subway_delays_by_day["day"], categories=ordered_days, ordered=True)
+avg_num_subway_delays_by_day = avg_num_subway_delays_by_day.sort_values("day")
 
-avg_num_subway_delays_by_day <- read_csv(
-   file = "data/summaries/avg_num_subway_delays_by_day.csv",
-   show_col_types = FALSE
-) 
-
-avg_num_subway_delays_by_day$day <- 
-  factor(avg_num_subway_delays_by_day$day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
-
-avg_num_subway_delays_by_day |>
-  ggplot(aes(x = day, y = mean_num_delays, fill = day)) +
-  geom_bar(stat = 'identity') +
-  xlab("Day of the Week") +
-  ylab("Mean Number of Delays") + 
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# Plot subway delays
+plt.figure(figsize=(8, 4))
+plt.bar(
+    avg_num_subway_delays_by_day["day"],
+    avg_num_subway_delays_by_day["mean_num_delays"],
+    color="salmon"
+)
+plt.xlabel("Day of the Week")
+plt.ylabel("Mean Number of Delays")
+plt.xticks(rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
 
 ```
@@ -236,7 +251,7 @@ avg_num_subway_delays_by_day |>
 @fig-avg_num_vsday shows the similar trends that are present in the average number of delays that occur on certain days of the week. On average Sundays in 2023 produce the lowest amount of delays. Buses and subways average 101.00 and 50.75 delays respectively on Sundays. It seems that the added commuter load or the assumption of an increased commuter load causes more delays. We cannot say for certain which of the two it is, as it is equally likely that the reason that more delays occur on certain days is because more buses and trains are scheduled more frequently to accommodate the load of working commuters. Equally, it is possible that the increase in delays is caused by a human actor. As shown by @fig-vsincident1 and @fig-vsincident2, a large part of the delays for subways are security and safety issues which is almost entirely comprised of human effects. What we can say now however, is that more preparation and further analysis into commuter effects must be done by the TTC to lower the large amount of delays caused. 
 
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -245,23 +260,27 @@ avg_num_subway_delays_by_day |>
 #| tbl-cap: "The total and average time in minutes wasted on delays"
 
 
-total_bus_delay_time_by_date <- 
-  read_csv(
-   file = "data/summaries/total_bus_delay_time_by_date.csv",
-   show_col_types = FALSE
-) 
+# Load summarized bus delay data
+total_bus_delay_time_by_date = pd.read_csv("data/summaries/total_bus_delay_time_by_date.csv")
 
-# Take 5 random rows from the summarized data 
-set.seed(302)
-total_bus_delay_time_by_date[sample(nrow(total_bus_delay_time_by_date), 5), ] |>
-  kable(
-    col.names = c("Date", "Day", "Total Delay Time", "Delay Count", "Average Delay Time"),
-    booktabs = TRUE
-  )
+# Take 5 random rows with a fixed seed
+sample_bus_delays = total_bus_delay_time_by_date.sample(n=5, random_state=302)
+
+# Rename columns to match desired display names
+sample_bus_delays.columns = [
+    "Date",
+    "Day",
+    "Total Delay Time",
+    "Delay Count",
+    "Average Delay Time"
+]
+
+# Display the sample table
+sample_bus_delays
 
 ```
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -271,21 +290,29 @@ total_bus_delay_time_by_date[sample(nrow(total_bus_delay_time_by_date), 5), ] |>
 #| fig-subcap: ["Total Delay Time", "Average Delay Time"]
 #| layout-ncol: 2
 
-total_bus_delay_time_by_date |>
-  ggplot(aes(x = date, y = total_delay_time)) + 
-  geom_point() +
-  geom_smooth(method = "loess") +
-  theme_light() +
-  xlab("Date") +
-  ylab("Total Delay Time (Minutes)")
+plt.figure(figsize=(10, 4))
+plt.scatter(
+    total_bus_delay_time_by_date["date"],
+    total_bus_delay_time_by_date["total_delay_time"],
+    color="blue", alpha=0.6
+)
+plt.xlabel("Date")
+plt.ylabel("Total Delay Time (Minutes)")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
-total_bus_delay_time_by_date |>
-  ggplot(aes(x = date, y = mean_delay_time)) + 
-  geom_point() +
-  geom_smooth(method = "loess") +
-  theme_light() +
-  xlab("Date") +
-  ylab("Total Delay Time (Minutes)")
+plt.figure(figsize=(10, 4))
+plt.scatter(
+    total_bus_delay_time_by_date["date"],
+    total_bus_delay_time_by_date["mean_delay_time"],
+    color="green", alpha=0.6
+)
+plt.xlabel("Date")
+plt.ylabel("Total Delay Time (Minutes)")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+plt.tight_layout()
+plt.show()
 
 
 ```
@@ -296,7 +323,7 @@ Here @tbl-totalbus is a random sampling of dates in 2023 and the total amount bo
 
 ### By Incident
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -304,24 +331,32 @@ Here @tbl-totalbus is a random sampling of dates in 2023 and the total amount bo
 #| label: fig-vsincident1
 #| fig-cap: "The average number of delays occurred due to incident types"
 
-# Load summarized data about number of delays vs incidents
+# Load summarized data
+bus_delays_by_incident = pd.read_csv("data/summaries/total_num_bus_delays_by_incident.csv")
 
-bus_delays_by_incident <- read_csv(
-   file = "data/summaries/total_num_bus_delays_by_incident.csv",
-   show_col_types = FALSE
-) 
-bus_delays_by_incident |> 
-  ggplot(aes(x=incident, y=n, fill=incident)) +
-  geom_bar(stat = "identity") +
-  xlab("Incident Type") +
-  ylab("Delay Count") +
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  guides(fill=guide_legend(title="Incident Type"))
+# Plot
+plt.figure(figsize=(8, 4))
+bars = plt.bar(
+    bus_delays_by_incident["incident"],
+    bus_delays_by_incident["n"],
+    color=plt.cm.Set2.colors  # distinct fill colors
+)
+
+plt.xlabel("Incident Type")
+plt.ylabel("Delay Count")
+plt.xticks(rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+
+# Add legend manually
+incident_labels = bus_delays_by_incident["incident"].tolist()
+plt.legend(bars, incident_labels, title="Incident Type", bbox_to_anchor=(1.05, 1), loc="upper left")
+
+plt.tight_layout()
+plt.show()
 
 ```
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -330,18 +365,28 @@ bus_delays_by_incident |>
 #| fig-cap: "The average number of delays occurred due to incident types"
 
 
-subway_delays_by_incident <- read_csv(
-   file = "data/summaries/total_num_subway_delays_by_incident.csv",
-   show_col_types = FALSE
-) 
-subway_delays_by_incident |> 
-  ggplot(aes(x = incident, y = n, fill = incident)) +
-  geom_bar(stat = "identity") +
-  xlab("Incident Type") +
-  ylab("Delay Count") +
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  guides(fill=guide_legend(title="Incident Type"))
+# Load summarized data
+subway_delays_by_incident = pd.read_csv("data/summaries/total_num_subway_delays_by_incident.csv")
+
+# Plot
+plt.figure(figsize=(8, 4))
+bars = plt.bar(
+    subway_delays_by_incident["incident"],
+    subway_delays_by_incident["n"],
+    color=plt.cm.Set2.colors
+)
+
+plt.xlabel("Incident Type")
+plt.ylabel("Delay Count")
+plt.xticks(rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+
+# Add legend
+incident_labels = subway_delays_by_incident["incident"].tolist()
+plt.legend(bars, incident_labels, title="Incident Type", bbox_to_anchor=(1.05, 1), loc="upper left")
+
+plt.tight_layout()
+plt.show()
 
 ```
 
@@ -352,7 +397,7 @@ From the TTC website, we know that they have been moving towards implementing au
 
 ### By Line {#sec-by_line}
 
-```{r}
+```{python}
 #| eval: true
 #| echo: false
 #| message: false
@@ -360,19 +405,28 @@ From the TTC website, we know that they have been moving towards implementing au
 #| label: fig-vsline
 #| fig-cap: "The number of delays on each TTC Line"
 
+# Load summarized data
+subway_delays_by_line = pd.read_csv("data/summaries/total_num_subway_delays_by_line.csv")
 
-subway_delays_by_line <- read_csv(
-   file = "data/summaries/total_num_subway_delays_by_line.csv",
-   show_col_types = FALSE
+# Plot
+plt.figure(figsize=(8, 4))
+bars = plt.bar(
+    subway_delays_by_line["line"],
+    subway_delays_by_line["n"],
+    color=plt.cm.Set2.colors  # visually distinct colors
 )
 
-subway_delays_by_line |> 
-  ggplot(aes(x = line, y = n, fill = line)) +
-  geom_bar(stat = "identity") + 
-  theme_light() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  xlab("TTC Line") +
-  ylab("Number of Delays")
+plt.xlabel("TTC Line")
+plt.ylabel("Number of Delays")
+plt.xticks(rotation=60, ha="right")
+plt.grid(axis="y", linestyle=":", linewidth=0.5)
+
+# Optional: Add legend
+line_labels = subway_delays_by_line["line"].tolist()
+plt.legend(bars, line_labels, title="TTC Line", bbox_to_anchor=(1.05, 1), loc="upper left")
+
+plt.tight_layout()
+plt.show()
 
 ```
 
