@@ -17,9 +17,6 @@ ttc_analysis/
 │   │   ├── raw_data.csv
 |   |   ├── filtered_or_selected_data.csv
 │   │   └── ...
-│   ├── sketches
-│   │   ├── predicted_dataset_sketch.png
-│   │   └── ...
 ├── outputs
 │   ├── data
 │   │   ├── cleaned_data.csv
@@ -31,12 +28,12 @@ ttc_analysis/
 │   ├── paper.qmd
 │   └── references.bib
 ├── scripts
-│   ├── 00-simulate_data.R
-│   ├── 01-download_data.R
-│   ├── 02-data_cleaning.R
-│   ├── 03-parse_codes.R        // 03=> Converting code to descriptions 
+│   ├── 00-simulate_data.py
+│   ├── 01-download_data.py
+│   ├── 02-data_cleaning.py
+│   ├── 03-parse_codes.py        // 03=> Converting code to descriptions 
 |   |                           //  and grouping classes together
-│   └── 04-summarise_data.R     // 04=> Averaging, summing and other ways
+│   └── 04-summarise_data.py     // 04=> Averaging, summing and other ways
 |                               //  of summarizing the data which is
 |                               // then stored in outputs/data/summaries/*
 └── ...
@@ -45,31 +42,14 @@ ttc_analysis/
 -   `input/data` contains the raw data collected from `opendatatoronto` and datasets that have been filtered and selected but not mutated.
 -   `outputs/data` contains the cleaned dataset that was constructed from the scripts, the data that is used for analysis within the final report paper.
 -   `outputs/data/summaries` contains summarized information from the datasets in the outer folder
-    - using `dplyr`'s `summarise()` and `group_by()` as well as other base statistical functions to achieve these summaries.
 -   `outputs/` (The outer folder) contains the resources for rendering the paper and the paper itself. (`paper.pdf`) 
--   `scripts` contains the R scripts used to simulate, download and clean data.
+-   `scripts` contains the Python scripts used to simulate, download and clean data.
 
 
 ## Running Scripts
 
-The numbers preceding the names of all the `R` scripts under the scripts folder represent the order in which they should be run. If anything changes with the file names, the prerequisites for each script file is in the preamble section. 
+The numbers preceding the names of all the `Python` scripts under the scripts folder represent the order in which they should be run. If anything changes with the file names, the prerequisites for each script file is in the preamble section. 
 
 The names of the files also represent what they each do, please see the comments made beside `03` and `04` above for explanation. If anything happens to the file names, the purpose of each script is stated in the preamble as well.
 
 Each script cleans up its own variables from the global environment. In some instances the same variable is used elsewhere, running a script may clean that variable regardless. Since everything is reproducible, you should have no issue reaching the same point as you were before. This is just a warning if you decide to debug or run snippets of this project.
-
-
-## LLM Statement
-
-No LLMs were utilized in the creation of this paper.
-
-
-## Sketches
-<img src="inputs/sketches/paper1-s1.png" alt="S1" width="400">
-
-**Sketch 1:** A bar graph displaying the potential correlation between delays and days of the week. The analysis actually shows the opposite, in which weekdays produce a higher amount of delays compared to weekends.
-
-<img src="inputs/sketches/paper1-s2.png" alt="S2" width="350">
-<img src="inputs/sketches/paper1-s3.png" alt="S3" width="350">
-
-**Sketch 2 + 3:** A bar graph displaying the potential correlation between delays and the time of day. Related to `Sketch 1` as it deals with the traditional work cycle. This trend was shown to be realistic, peaking during rush hour, and sinking during night hours and operations.

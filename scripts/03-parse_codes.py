@@ -1,8 +1,8 @@
 #### Preamble ####
 # Purpose: Group delay data into similar sets of incidents
-# Author: Timothius Prajogi
+# Author: Daniel Hartono
 # Date: 23 January 2024
-# Contact: tim.prajogi@mail.utoronto.ca
+# Contact: daniel.hartono@mail.utoronto.ca
 # License: MIT
 # Prerequisites: 01-download_data, 02-clean_data
 

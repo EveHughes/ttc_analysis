@@ -1,8 +1,8 @@
 ---
-title: "Analyzing TTC Delay Data to Improve Future Efficiency"
+title: "Using TTC Delay Data to Identify Opportunities for Improved Efficiency"
 abstract: "TTC delays have been increasing over time, and especially now in a period of overhaul in many parts of the system, it becomes important to analyze the effects of subway and bus delays in relation with each other as well as commuter loads. Using data published by the TTC and accessed through `opendatatoronto` we find that the greatest causes of delays are date and time, and equipment quality. Date and time factors are out of anyones control, but must be accounted for to improve future operational efficieny, while equipment quality has also been shown to be important, with mechanical failures heavily decreasing the reliability of buses."
-thanks: "Code and data supporting this analysis is available at: https://github.com/prajogt/ttc_analysis.git"
-author: "Timothius Prajogi"
+thanks: "Code and data supporting this analysis is available at: https://github.com/EveHughes/ttc_analysis.git"
+author: "Omar Hartono"
 date: today
 date-format: long
 format: pdf
@@ -38,14 +38,12 @@ The next section will cover the content of the data and analyses on the results 
 
 The datasets used for this report are the latest delay statistics from the 2023 year, `TTC Subway Delay Data` [@citesubwaydata] and `TTC Bus Delay Data` [@citebusdata], both of which were published by the TTC.
 
-These delay statistics were downloaded, cleaned, parsed, analyzed, and visualized using R [@citeR], a statistical programming language, with package support from `tidyverse` [@citetidyverse], a collection of libraries which included the following packages that were utilized: 
+These delay statistics were downloaded, cleaned, parsed, analyzed, and visualized using Python [@python], and a collection of libraries including the following packages that were utilized: 
 
-* `ggplot2` [@citeggplot] 
-* `dplyr` [@citedplyr] 
-* `readr` [@citereadr] 
-* `tibble` [@citetibble]
-
-For additional assistance with cleaning, the `janitor` [@citejanitor] package was used. For additional assistance with report generation the `knitr` [@citeknitr] package was used.
+* `numpy` [@numpy] 
+* `matplotlib` [@matplotlib] 
+* `pandas` [@pandas] 
+.
 
 ```{python}
 #| echo: false

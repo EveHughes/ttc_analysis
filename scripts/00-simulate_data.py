@@ -1,8 +1,8 @@
 #### Preamble ####
 # Purpose: Simulate delay data
-# Author: Timothius Prajogi
+# Author: Daniel Hartono
 # Date: 23 January 2024
-# Contact: tim.prajogi@mail.utoronto.ca
+# Contact: daniel.hartono@mail.utoronto.ca
 # License: MIT
 # Prerequisites: None
 
